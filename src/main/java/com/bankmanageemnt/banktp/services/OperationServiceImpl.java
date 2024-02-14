@@ -42,10 +42,18 @@ public class OperationServiceImpl implements OperationService {
     @Override
     public void deposer(Double amount, String accountId) {
         Compte compte=this.compteDao.findCompteByNumCompte(accountId);
-        Operation operation=new Operation();
-        if(compte instanceof CompteEpargne){
-            CompteEpargne compteEpargne=(CompteEpargne) compte;
-            compteEpargne.setSolde(compteEpargne.getSolde()+amount);
+        compte.setSolde(compte.getSolde()+amount);
+        Operation operation = new Operation();
+        operation.setOperationDate(new Date());
+        operation.setOperationType(OperationType.VERSEMENT);
+        operation.setMontant(amount);
+        operation.setCompte(compte);
+        this.operationDao.save(operation);
+
+
+        /**if (compte instanceof CompteEpargne) {
+            CompteEpargne compteEpargne = (CompteEpargne) compte;
+            compteEpargne.setSolde(compteEpargne.getSolde() + amount);
 
             operation.setOperationDate(new Date());
             operation.setOperationType(OperationType.VERSEMENT);
@@ -54,9 +62,9 @@ public class OperationServiceImpl implements OperationService {
             this.operationDao.save(operation);
 
             this.compteEpargneDao.save(compteEpargne);
-        }else if(compte instanceof CompteCourant){
-            CompteCourant compteCourant=(CompteCourant)compte;
-            compteCourant.setSolde(compteCourant.getSolde()+amount);
+        } else if (compte instanceof CompteCourant) {
+            CompteCourant compteCourant = (CompteCourant) compte;
+            compteCourant.setSolde(compteCourant.getSolde() + amount);
 
             operation.setOperationDate(new Date());
             operation.setOperationType(OperationType.VERSEMENT);
@@ -65,12 +73,19 @@ public class OperationServiceImpl implements OperationService {
             this.operationDao.save(operation);
 
             this.compteCourantDao.save(compteCourant);
-        }
+        }**/
     }
     @Override
     public void retirer(Double montant, String accountId) throws NoSuchFieldException {
         Compte compte=this.compteDao.findCompteByNumCompte(accountId);
-        if(compte instanceof CompteEpargne){
+        if(compte.getSolde()<montant)throw new NoSuchFieldException("");
+        Operation operation = new Operation();
+        operation.setOperationDate(new Date());
+        operation.setOperationType(OperationType.VERSEMENT);
+        operation.setMontant(montant);
+        operation.setCompte(compte);
+        this.operationDao.save(operation);
+       /** if(compte instanceof CompteEpargne){
             CompteEpargne compteEpargne=(CompteEpargne) compte;
             compteEpargne.setSolde(compteEpargne.getSolde()-montant);
             this.compteEpargneDao.save(compteEpargne);
@@ -80,7 +95,7 @@ public class OperationServiceImpl implements OperationService {
             if(compteCourant.getSolde()<montant)throw new NoSuchFieldException("amount not suffisant!!");
             compteCourant.setSolde(compteCourant.getSolde()-montant);
             this.compteCourantDao.save(compteCourant);
-        }
+        }**/
     }
 
     @Override

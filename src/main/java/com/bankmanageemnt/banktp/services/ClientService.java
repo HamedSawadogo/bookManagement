@@ -8,5 +8,6 @@ public interface ClientService {
     Client addClient(Client client);
     List<Client> findClientsByName(String clientName);
     List<Client> findAll(int page,int size);
+    Client addAcountToClient(String clientId,String accountId);
 
 }

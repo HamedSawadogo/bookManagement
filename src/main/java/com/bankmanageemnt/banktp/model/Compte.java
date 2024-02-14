@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TYPE",length = 10)
-public class Compte {
+public abstract class Compte {
 
     @Id
     private String numCompte;
