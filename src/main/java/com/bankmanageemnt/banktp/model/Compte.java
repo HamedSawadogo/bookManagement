@@ -30,7 +30,6 @@ public abstract class Compte {
 
     @OneToMany(fetch = FetchType.LAZY,
     cascade = CascadeType.ALL)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Operation>operations;
 
     @Override

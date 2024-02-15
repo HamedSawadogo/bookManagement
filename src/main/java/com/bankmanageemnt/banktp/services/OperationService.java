@@ -8,7 +8,7 @@ import java.util.List;
 public interface OperationService{
     void deposer(Double amount,String accountId);
     void retirer(Double montant,String accountId) throws NoSuchFieldException;
-    void  transferer(Double montant,String accountA,String accountB);
+    void  transferer(Double montant,String sender,String receiver);
     List<Operation>getAllOperations(int page,int size);
 
 }

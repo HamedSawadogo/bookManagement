@@ -24,7 +24,7 @@ public class BankTpApplication {
         SpringApplication.run(BankTpApplication.class,args);
     }
 
-
+    @Bean
     CommandLineRunner addCompteEpargne(CompteEpargneDao compteEpargneDao){
         return args ->{
             for (int i = 0; i < 10; i++) {
@@ -37,7 +37,7 @@ public class BankTpApplication {
             }
         };
     }
-
+    @Bean
     CommandLineRunner addCompteCourant(CompteCourantDao compteCourantDao){
         return args ->{
             for (int i = 0; i < 10; i++) {

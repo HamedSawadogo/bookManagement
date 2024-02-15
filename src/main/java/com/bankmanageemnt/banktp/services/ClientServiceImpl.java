@@ -25,6 +25,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client addClient(Client client) {
+        if(client==null){
+            throw new EntityNotFoundException("this client is not a valid client");
+        }
         client.setCode(UUID.randomUUID().toString());
         return this.clientDao.save(client);
     }

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -19,48 +20,45 @@ import java.util.UUID;
 @RequestMapping("/comptes")
 @RestController
 public class CompteController {
-
     private final CompteEpargneDao compteEpargneService;
     private final CompteCourantDao compteCourantDao;
     private final CompteDao compteDao;
 
-    public CompteController(CompteEpargneDao compteEpargneService, CompteCourantDao compteCourantDao, CompteDao compteDao) {
+
+    public CompteController(
+            CompteEpargneDao compteEpargneService,
+            CompteCourantDao compteCourantDao,
+            CompteDao compteDao)
+    {
         this.compteEpargneService = compteEpargneService;
         this.compteCourantDao = compteCourantDao;
         this.compteDao = compteDao;
     }
-
+    /**
+     * Renvoie la liste des Comptes
+     * @return
+     */
     @GetMapping("/all")
     public List<Compte>findAll(){
-        this.compteDao.findAll()
-                .forEach(compte -> {
-                    if(compte instanceof CompteCourant){
-                        log.info("Compte Courant");
-                        log.info(compte.toString());
-                    }
-                    if(compte instanceof  CompteEpargne){
-                        log.info("Compte d'épargne");
-                        log.info(compte.toString());
-                    }
-                });
         return this.compteDao.findAll();
     }
-
+    /**
+     * Enregistrer Un compte
+     * @param compte
+     * @return
+     */
     @PostMapping("/add")
     public Compte addCompte(@RequestBody Compte compte){
         System.err.println("Compte:  "+compte.toString());
         compte.setNumCompte(UUID.randomUUID().toString());
-        if(compte instanceof CompteEpargne){
-            CompteEpargne compteEpargne=(CompteEpargne) compte;
-            log.error("Enregistrement d'un Compte d'épargne "+compteEpargne.toString());
-            return this.compteEpargneService.save(compteEpargne);
-        }else if(compte instanceof CompteCourant){
-            CompteCourant compteCourant=(CompteCourant)compte;
-            log.error("Enregistrement d'un Compte Courant "+compteCourant.toString());
-            return this.compteCourantDao.save(compteCourant);
-        }
-        return  null;
+        compte.setCreationDate(new Date());
+        return  this.compteDao.save(compte);
     }
+    /**
+     * Rechercher Un compte par Son Id
+     * @param countNumber
+     * @return
+     */
     @GetMapping("/{id}")
     public Compte findAcoundById(@PathVariable("id") String countNumber){
         return this.compteDao.findById(countNumber).orElseThrow(()->new EntityNotFoundException("this acount is not Found"));
