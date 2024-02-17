@@ -1,9 +1,8 @@
 package com.bankmanageemnt.banktp.model;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
+
 import java.util.List;
 
 
@@ -11,9 +10,11 @@ import java.util.List;
 @NoArgsConstructor @AllArgsConstructor
 @Table
 @Entity
+@Builder
 public class Client {
     @Id
     private String code;
+    @NotBlank(message = "Le nom du Client est invalide!! ")
     private String name;
 
 

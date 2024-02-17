@@ -11,12 +11,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Stream;
+
 
 @SpringBootApplication
 public class BankTpApplication {
@@ -24,7 +26,7 @@ public class BankTpApplication {
         SpringApplication.run(BankTpApplication.class,args);
     }
 
-    @Bean
+
     CommandLineRunner addCompteEpargne(CompteEpargneDao compteEpargneDao){
         return args ->{
             for (int i = 0; i < 10; i++) {
@@ -37,7 +39,7 @@ public class BankTpApplication {
             }
         };
     }
-    @Bean
+
     CommandLineRunner addCompteCourant(CompteCourantDao compteCourantDao){
         return args ->{
             for (int i = 0; i < 10; i++) {

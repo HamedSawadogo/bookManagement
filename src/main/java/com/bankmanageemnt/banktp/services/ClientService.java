@@ -9,5 +9,8 @@ public interface ClientService {
     List<Client> findClientsByName(String clientName);
     List<Client> findAll(int page,int size);
     Client addAcountToClient(String clientId,String accountId);
-
+    Client findClientById(String clientId);
+    void deleteClientById(String clientId);
+    Client findCLientByName(String clientName);
+    Client updateClient(Client client,String clientId);
 }

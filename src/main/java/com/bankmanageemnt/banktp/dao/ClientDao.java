@@ -11,10 +11,25 @@ import java.util.Optional;
 
 public interface ClientDao extends JpaRepository<Client,String> {
 
-    //rechercher les Clients Par Nom
+    /**
+     * Renvoie la liste de CLients par Nom
+     * @param clientName
+     * @return
+     */
     @Query("SELECT c FROM Client  c WHERE c.name LIKE  %:name%")
     List<Client>findClientsByName(@Param("name")String clientName);
 
-
+    /**
+     * Renvoie la liste des Page des clients
+     * @param pageable
+     * @return
+     */
     Page<Client> findAll(Pageable pageable);
+
+    /**
+     * Rechercher un Client par son Nom
+     * @param clientName
+     * @return
+     */
+    Client findClientByName(String clientName);
 }
