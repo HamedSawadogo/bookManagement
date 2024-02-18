@@ -1,14 +1,12 @@
 package com.bankmanageemnt.banktp.model;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Data
-@NoArgsConstructor @AllArgsConstructor
+@AllArgsConstructor @NoArgsConstructor
 @Entity
+@Builder
 @DiscriminatorValue("COURANT")
 public class CompteCourant extends Compte{
     private Double decouvert;

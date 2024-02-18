@@ -2,6 +2,7 @@ package com.bankmanageemnt.banktp.controllers;
 import com.bankmanageemnt.banktp.dao.CompteCourantDao;
 import com.bankmanageemnt.banktp.dao.CompteDao;
 import com.bankmanageemnt.banktp.dao.CompteEpargneDao;
+import com.bankmanageemnt.banktp.dto.CompteCourantDto;
 import com.bankmanageemnt.banktp.model.Compte;
 import com.bankmanageemnt.banktp.model.CompteCourant;
 import com.bankmanageemnt.banktp.model.CompteEpargne;
@@ -9,6 +10,9 @@ import com.bankmanageemnt.banktp.services.CompteEpargneImpl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -38,7 +42,7 @@ public class CompteController {
      * Renvoie la liste des Comptes
      * @return
      */
-    @GetMapping("/all")
+    @GetMapping("")
     public List<Compte>findAll(){
         return this.compteDao.findAll();
     }
@@ -47,12 +51,18 @@ public class CompteController {
      * @param compte
      * @return
      */
-    @PostMapping("/add")
-    public Compte addCompte(@RequestBody Compte compte){
-        System.err.println("Compte:  "+compte.toString());
-        compte.setNumCompte(UUID.randomUUID().toString());
-        compte.setCreationDate(new Date());
-        return  this.compteDao.save(compte);
+    @PostMapping("/courant")
+    public ResponseEntity<?> addCompteCourant(@RequestBody CompteCourantDto courantDto){
+        try {
+            CompteCourant compteCourant= new CompteCourant();
+            compteCourant.setSolde(courantDto.getSolde());
+            compteCourant.setNumCompte(UUID.randomUUID().toString());
+            compteCourant.setDecouvert(courantDto.getDecouvert());
+            compteCourant.setCreationDate(courantDto.getCreationDate());
+            return  ResponseEntity.status(HttpStatus.CREATED).body(this.compteDao.save(compteCourant));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     /**
      * Rechercher Un compte par Son Id
@@ -61,6 +71,7 @@ public class CompteController {
      */
     @GetMapping("/{id}")
     public Compte findAcoundById(@PathVariable("id") String countNumber){
-        return this.compteDao.findById(countNumber).orElseThrow(()->new EntityNotFoundException("this acount is not Found"));
+        return this.compteDao.findById(countNumber)
+                .orElseThrow(()->new EntityNotFoundException("this acount is not Found"));
     }
 }

@@ -5,12 +5,14 @@ import com.bankmanageemnt.banktp.model.Client;
 import com.bankmanageemnt.banktp.model.Compte;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @Transactional
 public class ClientServiceImpl implements ClientService {
@@ -29,10 +31,13 @@ public class ClientServiceImpl implements ClientService {
      */
     @Override
     public Client addClient(Client client) {
+        log.info("Ajout d'un nouveau Client");
         if(client==null){
+            log.warn("ce client est invalide   client=null ");
             throw new EntityNotFoundException("this client is not a valid client");
         }
         client.setCode(UUID.randomUUID().toString());
+        log.info("Client Enregistré avec success");
         return this.clientDao.save(client);
     }
     /**
@@ -42,6 +47,7 @@ public class ClientServiceImpl implements ClientService {
      */
     @Override
     public List<Client> findClientsByName(String clientName) {
+        log.info("Recherche de "+clientName+"  dans la base de donnée ");
         return this.clientDao.findClientsByName(clientName);
     }
     /**

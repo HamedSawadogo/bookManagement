@@ -2,6 +2,7 @@ package com.bankmanageemnt.banktp.controllers;
 import com.bankmanageemnt.banktp.model.Client;
 import com.bankmanageemnt.banktp.services.ClientServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class ClientController{
      */
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "",method = RequestMethod.POST)
-    public Client addClient(@RequestBody Client client){
+    public Client addClient(@RequestBody @Valid Client client){
         return this.clientService.addClient(client);
     }
     /**

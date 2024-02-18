@@ -59,12 +59,10 @@ public class ClientServiceImplIT {
                 .code(UUID.randomUUID().toString())
                 .name("Bill")
                 .build();
-
         Client client1=this.clientService.findCLientByName("Akim");
         Client clientUpdated=this.clientService.updateClient(newClient,client1.getCode());
         assertThat(clientUpdated.getName()).isEqualTo("Bill");
     }
-
     @Test
     @Order(4)
     @DisplayName("Supprimer un Client ")
@@ -77,6 +75,4 @@ public class ClientServiceImplIT {
             Client client=this.clientService.findClientById(client1.getCode());
         });
     }
-
-
 }

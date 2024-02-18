@@ -1,11 +1,9 @@
 package com.bankmanageemnt.banktp.controllers;
 import com.bankmanageemnt.banktp.dao.ClientDao;
-import net.minidev.json.JSONUtil;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,14 +28,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Tag("Clients")
 @DisplayName("Test des clients")
-public class ClientControllerTest {
+public class ClientControllerIT {
 
     @Autowired
     private ClientDao clientDao;
     @Autowired
     private MockMvc mockMvc;
-
-
     private JSONObject json;
 
     @BeforeAll
@@ -60,22 +56,32 @@ public class ClientControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("$.name",is("Kader")))
                 .andReturn();
-
         this.json=new JSONObject(result.getResponse().getContentAsString());
     }
-
     @Test
     @Order(value = 2)
-    @DisplayName("rechercher un Client par Son ID")
-    public  void testGetClientById() throws  Exception{
+    @DisplayName("rechercher un Client par Son ID Non Valide")
+    public  void testNotFoundClient() throws  Exception{
         this.mockMvc.perform(MockMvcRequestBuilders.get(
-                "/clients/"+this.json.getString("code"))
+                "/clients/"+this.json.getString("code")+"33")
                 .contentType(MediaType.APPLICATION_JSON)
                  ).andDo(print())
-                .andExpect(jsonPath("$.name",is("Kader")));
+                .andExpect(jsonPath("$.message",is("this client is not Found")))
+                .andExpect(jsonPath("$.code",is(404)));
+
     }
     @Test
     @Order(value = 3)
+    @DisplayName("rechercher un Client par Son ID")
+    public  void testGetClientById() throws  Exception{
+        this.mockMvc.perform(MockMvcRequestBuilders.get(
+                                "/clients/"+this.json.getString("code"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(jsonPath("$.name",is("Kader")));
+    }
+    @Test
+    @Order(value = 4)
     @DisplayName("Renvoie la liste des Clients")
     public void testGetClientsList() throws Exception{
         this.mockMvc.perform(get("/clients")
@@ -102,13 +108,12 @@ public class ClientControllerTest {
 
     }
     @Test
-    @Order(value = 5)
+    @Order(value = 6)
     @DisplayName("Supprimer Un client Par Son Id")
     public  void testDeleteClient() throws  Exception{
        this.mockMvc.perform(delete("/clients/"+json.getString("code")
                )
-       ).andDo(print())
-               .andExpect(status().isOk());
+       ).andDo(print()).andExpect(status().isOk());
 
 
     }

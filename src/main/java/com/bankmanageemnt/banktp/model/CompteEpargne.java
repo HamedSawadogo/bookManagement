@@ -6,6 +6,7 @@ import lombok.*;
 @ToString
 @Data @NoArgsConstructor @AllArgsConstructor
 @Entity
+@Builder
 @DiscriminatorValue("EPARGNE")
 public class CompteEpargne extends Compte {
     private Double taux;
