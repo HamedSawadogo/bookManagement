@@ -20,7 +20,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 /**
  * @author Sawadogo hamed   email <kerb418@gmail.com>
  **/
@@ -36,8 +35,6 @@ public class ClientControllerTest {
     private ClientDao clientDao;
     @Autowired
     private MockMvc mockMvc;
-
-
     private JSONObject json;
 
     @BeforeAll
@@ -60,10 +57,8 @@ public class ClientControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("$.name",is("Kader")))
                 .andReturn();
-
         this.json=new JSONObject(result.getResponse().getContentAsString());
     }
-
     @Test
     @Order(value = 2)
     @DisplayName("rechercher un Client par Son ID")
@@ -84,8 +79,6 @@ public class ClientControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("$[0].name",is("Kader")));
     }
-
-
     @Test
     @Order(value = 5)
     @DisplayName("Modifier Un client Un client Par Son Id")
@@ -99,21 +92,14 @@ public class ClientControllerTest {
                 ).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name",is("Valangui")));
-
     }
     @Test
     @Order(value = 5)
     @DisplayName("Supprimer Un client Par Son Id")
-    public  void testDeleteClient() throws  Exception{
-       this.mockMvc.perform(delete("/clients/"+json.getString("code")
-               )
-       ).andDo(print())
-               .andExpect(status().isOk());
-
-
+    public  void testDeleteClient() throws  Exception {
+        this.mockMvc.perform(delete("/clients/" + json.getString("code")
+                        )
+                ).andDo(print())
+                .andExpect(status().isOk());
     }
-
-
-
-
 }

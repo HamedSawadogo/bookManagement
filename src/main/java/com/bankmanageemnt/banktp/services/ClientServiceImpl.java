@@ -7,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
@@ -17,10 +18,12 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientDao clientDao;
     private final CompteDao compteDao;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public ClientServiceImpl(ClientDao clientDao, CompteDao compteDao) {
+    public ClientServiceImpl(ClientDao clientDao, CompteDao compteDao, BCryptPasswordEncoder passwordEncoder) {
         this.clientDao = clientDao;
         this.compteDao = compteDao;
+        this.passwordEncoder = passwordEncoder;
     }
     /**
      * Ajouter un Client
@@ -33,6 +36,7 @@ public class ClientServiceImpl implements ClientService {
             throw new EntityNotFoundException("this client is not a valid client");
         }
         client.setCode(UUID.randomUUID().toString());
+        client.setPassword(this.passwordEncoder.encode(client.getPassword()));
         return this.clientDao.save(client);
     }
     /**
