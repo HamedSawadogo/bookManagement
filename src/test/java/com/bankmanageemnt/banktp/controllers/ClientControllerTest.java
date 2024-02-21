@@ -49,13 +49,18 @@ public class ClientControllerTest {
     public void testAddNewClient() throws Exception{
         MvcResult result=mockMvc.perform(post("/clients")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("   {\n" +
-                                "        \"name\": \"Kader\"\n" +
-                                "     \n" +
-                                "        }")
+                        .content("{\n" +
+                                "\t\"name\": \"Tom\",\n" +
+                                "    \"email\":\"ali@gmail.com\",\n" +
+                                "    \"password\":\"1234\",\n" +
+                                "     \"role\":{\n" +
+                                "        \"roleName\":\"USER\"\n" +
+                                "     }\n" +
+                                "\n" +
+                                "}")
                 ).andExpect(status().isCreated())
                 .andDo(print())
-                .andExpect(jsonPath("$.name",is("Kader")))
+                .andExpect(jsonPath("$.name",is("Tom")))
                 .andReturn();
         this.json=new JSONObject(result.getResponse().getContentAsString());
     }
@@ -67,7 +72,7 @@ public class ClientControllerTest {
                 "/clients/"+this.json.getString("code"))
                 .contentType(MediaType.APPLICATION_JSON)
                  ).andDo(print())
-                .andExpect(jsonPath("$.name",is("Kader")));
+                .andExpect(jsonPath("$.name",is("Tom")));
     }
     @Test
     @Order(value = 3)
@@ -77,7 +82,7 @@ public class ClientControllerTest {
                 .content(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$[0].name",is("Kader")));
+                .andExpect(jsonPath("$[0].name",is("Tom")));
     }
     @Test
     @Order(value = 5)
@@ -86,9 +91,12 @@ public class ClientControllerTest {
         this.mockMvc.perform(
                          put("/clients/"+json.getString("code")
                         ).contentType(MediaType.APPLICATION_JSON)
-                                 .content("  {\n" +
-                                         "     \"name\":\"Valangui\"\n" +
-                                         "   }")
+                                 .content("{\n" +
+                                         "\t\"name\": \"Valangui\",\n" +
+                                         "    \"email\":\"ali@gmail.com\",\n" +
+                                         "    \"password\":\"1234\",\n"+
+                                         "\n" +
+                                         "}")
                 ).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name",is("Valangui")));

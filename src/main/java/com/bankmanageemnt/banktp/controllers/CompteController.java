@@ -37,7 +37,7 @@ public class CompteController {
      * Renvoie la liste des Comptes
      * @return
      */
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<Compte>findAll(){
         return this.compteDao.findAll();
     }
@@ -46,12 +46,20 @@ public class CompteController {
      * @param compte
      * @return
      */
-    @PostMapping("/add")
-    public Compte addCompte(@RequestBody Compte compte){
-        System.err.println("Compte:  "+compte.toString());
+    @PostMapping("/epargne")
+    public CompteEpargne addCompteEpargne(@RequestBody CompteEpargne compte){
         compte.setNumCompte(UUID.randomUUID().toString());
-        compte.setCreationDate(new Date());
-        return  this.compteDao.save(compte);
+        return this.compteEpargneService.save(compte);
+    }
+    /**
+     * Enregistrer un Compte Courant
+     * @param compte
+     * @return
+     */
+    @PostMapping("/courant")
+    public CompteCourant addCompteCourant(@RequestBody CompteCourant compte){
+        compte.setNumCompte(UUID.randomUUID().toString());
+        return this.compteCourantDao.save(compte);
     }
     /**
      * Rechercher Un compte par Son Id

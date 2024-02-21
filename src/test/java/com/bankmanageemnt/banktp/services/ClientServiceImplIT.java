@@ -6,14 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 /**
@@ -21,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author hamed
  * @version 1.1
  */
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -30,6 +26,7 @@ public class ClientServiceImplIT {
     MockMvc mockMvc;
     @Autowired
     private ClientServiceImpl clientService;
+
 
     @Test
     @Order(1)
@@ -48,7 +45,6 @@ public class ClientServiceImplIT {
     public void searchClientByName(){
         Client client1=this.clientService.findCLientByName("Akim");
         assertThat(client1.getName()).isEqualTo("Akim");
-
     }
     @Test
     @Order(3)
@@ -59,12 +55,10 @@ public class ClientServiceImplIT {
                 .code(UUID.randomUUID().toString())
                 .name("Bill")
                 .build();
-
         Client client1=this.clientService.findCLientByName("Akim");
         Client clientUpdated=this.clientService.updateClient(newClient,client1.getCode());
         assertThat(clientUpdated.getName()).isEqualTo("Bill");
     }
-
     @Test
     @Order(4)
     @DisplayName("Supprimer un Client ")
@@ -77,6 +71,4 @@ public class ClientServiceImplIT {
             Client client=this.clientService.findClientById(client1.getCode());
         });
     }
-
-
 }

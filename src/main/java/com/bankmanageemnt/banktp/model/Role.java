@@ -1,6 +1,4 @@
 package com.bankmanageemnt.banktp.model;
-
-import io.swagger.models.auth.In;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

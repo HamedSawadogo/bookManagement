@@ -1,4 +1,5 @@
 package com.bankmanageemnt.banktp.controllers;
+import com.bankmanageemnt.banktp.dto.CreateClientRequest;
 import com.bankmanageemnt.banktp.model.Client;
 import com.bankmanageemnt.banktp.services.ClientServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,6 +17,7 @@ public class ClientController{
     public ClientController(ClientServiceImpl clientService) {
         this.clientService = clientService;
     }
+
     /**
      * Enregistrer un client
      * @param client
@@ -77,7 +79,7 @@ public class ClientController{
         return this.clientService.findClientsByName(name);
     }
     @GetMapping("")
-    public List<Client>findAll(
+    public Page<Client>findAll(
             @RequestParam(defaultValue ="0")int page,
             @RequestParam(defaultValue ="10")int size
     ){

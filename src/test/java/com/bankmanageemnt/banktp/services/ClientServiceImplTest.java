@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,12 +31,14 @@ public class ClientServiceImplTest {
     ClientDao clientDao;
     @Mock
     CompteDao compteDao;
+    @Mock
+    BCryptPasswordEncoder passwordEncoder;
 
     ClientServiceImpl clientService;
 
     @BeforeEach
     public void setup(){
-      this.clientService=new ClientServiceImpl(clientDao,compteDao);
+      this.clientService=new ClientServiceImpl(clientDao,compteDao,passwordEncoder);
     }
 
     @Test

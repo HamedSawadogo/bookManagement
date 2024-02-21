@@ -5,6 +5,7 @@ import com.bankmanageemnt.banktp.model.Client;
 import com.bankmanageemnt.banktp.model.Compte;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,17 +15,13 @@ import java.util.UUID;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
     private final ClientDao clientDao;
     private final CompteDao compteDao;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public ClientServiceImpl(ClientDao clientDao, CompteDao compteDao, BCryptPasswordEncoder passwordEncoder) {
-        this.clientDao = clientDao;
-        this.compteDao = compteDao;
-        this.passwordEncoder = passwordEncoder;
-    }
     /**
      * Ajouter un Client
      * @param client
@@ -55,9 +52,9 @@ public class ClientServiceImpl implements ClientService {
      * @return
      */
     @Override
-    public List<Client> findAll(int page,int size) {
+    public Page<Client> findAll(int page,int size) {
         PageRequest pageRequest=PageRequest.of(page,size);
-        return this.clientDao.findAll(pageRequest).stream().toList();
+        return this.clientDao.findAll(pageRequest);
     }
     /**
      * Attribuer un Compte a Un Client
@@ -119,5 +116,16 @@ public class ClientServiceImpl implements ClientService {
                 .name(client.getName())
                 .build();
         return this.addClient(newClient);
+    }
+    /**
+     * Supprimer plusieurs clients par leurs Id passé en paramètres
+     * @param clientsId
+     */
+    @Override
+    public void deleteMultipleClients(List<String> clientsId) {
+         clientsId.forEach(clientId->{
+             Client client=this.findClientById(clientId);
+             this.clientDao.delete(client);
+         });
     }
 }
